@@ -1,0 +1,123 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - ECOM</title>
+    
+    <!-- Bootstrap CSS (For Better Design) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/css/bootstrap.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'catalog/css/style.css' %}">
+    
+    <!-- FontAwesome (For Icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- pages li t3ytlhom-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <a class="navbar-brand text-primary font-weight-bold" href="http://127.0.0.1:8000">ECOM</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="http://127.0.0.1:8000">Home</a></li>
+               
+                <li class="nav-item"><a class="nav-link" href="http://127.0.0.1:8000/checkout">Checkout</a></li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'order_summary' %}">
+                        <i class="fas fa-shopping-cart"></i> Cart
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </nav>
+    
+
+    <!-- Hero Section with Carousel -->
+    <div id="heroCarousel" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="{% static 'catalog/images/banner1.jpg' %}" class="d-block w-100" alt="Slide 1">
+                <div class="carousel-caption d-none d-md-block">
+                    <h2>Learn Bootstrap 4 with MDB</h2>
+                    <p>Best & free guide for responsive web design</p>
+                    <a href="#" class="btn btn-outline-light">START FREE TUTORIAL</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Categories Section -->
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4>Categories:</h4>
+            <div class="category-buttons">
+                <button class="btn btn-primary">All</button>
+                <button class="btn btn-light">Shirts</button>
+                <button class="btn btn-light">Sport Wears</button>
+                <button class="btn btn-light">Outwears</button>
+            </div>
+            <input type="text" class="form-control w-25" placeholder="Search">
+        </div>
+    </div>
+
+    <!-- Product Grid -->
+   <div class="container mt-4">
+    <div class="row">
+        {% for object in object_list %}
+        <div class="col-md-3">
+            <a href="{% url 'product_detail' object.slug %}" class="text-decoration-none">
+                <div class="card">
+                    {% if object.image %}
+                        <img src="{{ object.image.url }}" class="card-img-top" alt="{{ object.title }}">
+                    {% else %}
+                        <img src="{% static 'catalog/images/default.jpg' %}" class="card-img-top" alt="Default Image">
+                    {% endif %}
+                    
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {{ object.title }}
+                            <span class="badge badge-pill 
+                            {% if object.label == 'P' %} badge-primary 
+                            {% elif object.label == 'S' %} badge-secondary 
+                            {% elif object.label == 'D' %} badge-danger 
+                            {% endif %}">
+                            {{ object.get_label_display }}
+                            </span>
+                        </h5>
+                        
+                        {% if object.discount_price %}
+                            <p class="card-text"><del class="text-muted">${{ object.price }}</del> ${{ object.discount_price }}</p>
+                        {% else %}
+                            <p class="card-text">${{ object.price }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </a>
+            
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+    
+
+    <!-- Footer -->
+    <footer class="text-center p-3 mt-4 bg-dark text-light">
+        &copy; 2025 E-Commerce. All Rights Reserved.
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
+
+

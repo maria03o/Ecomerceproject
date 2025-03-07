@@ -1,0 +1,153 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ object.name }} - ECOM</title>
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/css/bootstrap.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'catalog/css/style.css' %}">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Django Messages -->
+    {% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <a class="navbar-brand text-primary font-weight-bold" href="{% url 'homepage' %}">ECOM</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="{% url 'homepage' %}">Home</a></li>
+                <li class="nav-item"><a class="nav-link active" href="{% url 'product_detail' object.slug %}">Product</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'checkout' %}">Checkout</a></li>
+              
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Product Section -->
+    <div class="container mt-5">
+        <div class="row">
+            <!-- Product Image -->
+            <div class="col-md-6">
+                {% if object.image %}
+                    <img src="{{ object.image.url }}" class="img-fluid rounded" alt="{{ object.name }}">
+                {% else %}
+                    <img src="{% static 'catalog/images/default-product.jpg' %}" class="img-fluid rounded" alt="No Image Available">
+                {% endif %}
+            </div>
+
+            <!-- Product Details -->
+            <div class="col-md-6">
+                <h2 class="font-weight-bold">{{ object.name }}</h2>
+                
+                {% if object.get_category_display %}
+                    <span class="badge badge-purple">{{ object.get_category_display }}</span>
+                {% endif %}
+                <span class="badge badge-primary">New</span>
+                <span class="badge badge-danger">Bestseller</span>
+
+                {% if object.discount_price %}
+                    <p class="card-text">
+                        <del class="text-muted">${{ object.price }}</del> 
+                        <strong class="text-success">${{ object.discount_price }}</strong>
+                    </p>
+                {% else %}
+                    <p class="card-text"><strong class="text-dark">${{ object.price }}</strong></p>
+                {% endif %}
+
+                <p class="mt-3">{{ object.description }}</p>
+
+                <!-- Quantity & Add to Cart -->
+                <div class="d-flex align-items-center mt-3">
+                    
+                    
+                    <button id="add-to-cart-btn" class="btn btn-primary btn-lg" data-url="{% url 'add_to_cart' object.slug %}">
+                        ADD TO CART <i class="fas fa-shopping-cart"></i>
+                    </button>
+                    
+                    <a href="{{ object.get_remove_from_cart_url }}" class="btn btn-danger btn-lg ml-2">
+                        REMOVE FROM CART <i class="fas fa-trash-alt"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional Information Section -->
+    <div class="container mt-5">
+        <h4>Additional information</h4>
+        <p class="text-muted">
+            {{ object.additional_info|default:"No additional information available." }}
+        </p>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center p-3 mt-4 bg-dark text-light">
+        &copy; 2025 E-Commerce. All Rights Reserved.
+    </footer>
+
+    <!-- Bootstrap & jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
+
+    <!-- JavaScript to Handle Quantity and AJAX Cart Addition -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("add-to-cart-btn").addEventListener("click", function (event) {
+                event.preventDefault();
+    
+                let url = this.getAttribute("data-url");  // Get URL from button
+    
+                fetch(url, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": "{{ csrf_token }}"
+                    },
+                    body: JSON.stringify({ "quantity": 1 })  // Always add 1
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // After item is added, redirect to order summary
+                    window.location.href = "http://127.0.0.1:8000/order-summary/"; 
+                })
+                .catch(error => console.error("Error adding to cart:", error));
+            });
+        });
+    </script>
+    
+    
+    
+    
+    
+    
+
+</body>
+</html>
+
+
+
+

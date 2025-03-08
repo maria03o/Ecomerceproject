@@ -28,8 +28,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'catalog'
+    'catalog',
+    'allauth',
+    'allauth.account',
+    "allauth.socialaccount",
+    "crispy_forms",
+    "crispy_bootstrap4",
+
 ]
+CRISPY_TEMPLATE_PACK ="bootstrap4"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -39,6 +46,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+     
+ 
+ 
+ 
+
+    # Add the account middleware:
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = 'ecomerce_project.urls'
@@ -48,7 +62,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'catalog', 'static'),
+        'DIRS': [#os.path.join(BASE_DIR, 'catalog', 'static'),
                  os.path.join(BASE_DIR, 'catalog', 'templates')], 
 
         'APP_DIRS': True,
@@ -62,6 +76,7 @@ TEMPLATES = [
         },
     },
 ]
+
  
 WSGI_APPLICATION = 'ecomerce_project.wsgi.application'
 
@@ -131,3 +146,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+#SITE_ID = 1 
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+    # `allauth` specific authentication methods, such as login by email
+    'allauth.account.auth_backends.AuthenticationBackend', 
+]

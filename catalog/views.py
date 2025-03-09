@@ -9,7 +9,8 @@ from django.http import JsonResponse
 import stripe
 
 from .models import Item, Order, OrderItem
-
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 # Page d'accueil
 class HomeView(ListView):
@@ -30,10 +31,13 @@ def product_view(request):
 from django.shortcuts import render, get_object_or_404
 from .models import Order
 
+@login_required(login_url='/accounts/login/')
 def checkout(request):
-    order = Order.objects.filter(user=request.user, ordered=False).first()
-    return render(request, 'checkout.html', {'order': order})
-
+    if not request.user.is_authenticated:
+        messages.warning(request, "You need to log in to proceed to checkout.")
+        return redirect('account_login')  # Redirect to login page
+    
+    return render(request, 'checkout.html')
 
 # Ajouter un produit au panier
 from django.http import JsonResponse

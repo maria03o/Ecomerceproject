@@ -18,7 +18,6 @@
 </head>
 <body>
 
-    <!-- Navbar -->
     <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-white shadow-sm">
         <div class="container">
             <!-- Brand -->
@@ -29,7 +28,7 @@
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
+    
             <!-- Navbar links -->
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
@@ -37,16 +36,35 @@
                         <a class="nav-link" href="{% url 'homepage' %}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'checkout' %}">sheckout</a>
+                        <a class="nav-link" href="{% url 'checkout' %}">Checkout</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-shopping-cart"></i> Cart</a>
-                    </li>
+                    {% if request.user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Hello, {{ request.user.username }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'order_summary' %}" class="nav-link">
+                                <span class="badge badge-danger mr-1">{{ request.user|cart_total_items }}</span>
+                                <i class="fas fa-shopping-cart"></i>
+                                <span class="d-none d-sm-inline-block"> Cart </span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'account_login' %}">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'account_signup' %}">Signup</a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
     </nav>
-
+    
     <!-- Flash Messages -->
     <div class="container mt-5 pt-4">
         {% if messages %}

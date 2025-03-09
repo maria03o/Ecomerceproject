@@ -153,3 +153,13 @@ AUTHENTICATION_BACKENDS = [
     # `allauth` specific authentication methods, such as login by email
     'allauth.account.auth_backends.AuthenticationBackend', 
 ]
+from django.urls import reverse_lazy
+
+LOGIN_REDIRECT_URL = '/'  # Redirects to home page after login
+ACCOUNT_LOGOUT_REDIRECT_URL = '/'  # Redirects to home after logout
+
+
+ACCOUNT_EMAIL_VERIFICATION = "none"
+ACCOUNT_AUTHENTICATION_METHOD = "username"
+ACCOUNT_EMAIL_REQUIRED = False
+

@@ -108,3 +108,12 @@ def create_checkout_session(request):
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)
 
+
+
+class Payment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    charge_id = models.CharField(max_length=100)
+    amount = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.user.username

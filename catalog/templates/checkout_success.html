@@ -1,15 +1,25 @@
-{% extends "base.html" %}
-
-{% block head_title %}Checkout Success{% endblock %}
-
+{% extends "base.html" %} {% block head_title %}Checkout Success{% endblock %}
 {% block content %}
 <main>
-    <div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
-        <div class="text-center shadow p-4 rounded" style="max-width: 400px; background: #fff;">
-            <h1 class="text-success">Thank You!</h1>
-            <p>Your order has been processed successfully.</p>
-            <a href="/" class="btn btn-primary">Return to Home</a>
-        </div>
+  <div
+    class="container d-flex justify-content-center align-items-center"
+    style="min-height: 80vh"
+  >
+    <div
+      class="text-center shadow p-4 rounded"
+      style="max-width: 400px; background: #fff"
+    >
+      <h1 class="text-success">Thank You!</h1>
+      <p>Your order has been processed successfully.</p>
+      <a href="/" class="btn btn-primary">Return to Home</a>
+      {% if order.id %}
+      <a href="{% url 'generate_facture' order.id %}" class="btn btn-secondary"
+        >📄 Download Facture</a
+      >
+      {% else %}
+      <p>Facture indisponible</p>
+      {% endif %}
     </div>
+  </div>
 </main>
 {% endblock %}
